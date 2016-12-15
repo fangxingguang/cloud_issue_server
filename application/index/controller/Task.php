@@ -16,7 +16,7 @@ class Task
 
     public function select()
     {
-        $task_list = Db::table('task')->field('task_id,task_name')->order('task_order')->select();
+        $task_list = Db::table('task')->field('task_id,task_name')->order('task_create_time desc')->select();
         foreach($task_list as &$val){
             $val['tasks'] =  Db::table('task')->where('task_id',$val['task_id'])->select();
         }
