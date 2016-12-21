@@ -18,3 +18,7 @@ function success($info){
 function error($info){
     return ['status'=>0,'info'=>$info];
 }
+
+function dateline(){
+    return date('Y-m-d H:i:s');
+}
