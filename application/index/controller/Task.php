@@ -2,7 +2,7 @@
 namespace app\index\controller;
 use \think\Request;
 use \think\Db;
-class Task
+class Task extends Base
 {
     public function add()
     {
