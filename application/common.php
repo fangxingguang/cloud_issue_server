@@ -19,6 +19,12 @@ function error($info){
     return ['status'=>0,'info'=>$info];
 }
 
+function json($status,$info=''){
+    header('Content-Type: application/json');
+    echo json_encode(['status'=>$status,'info'=>$info]);
+    exit;
+}
+
 function dateline(){
     return date('Y-m-d H:i:s');
 }

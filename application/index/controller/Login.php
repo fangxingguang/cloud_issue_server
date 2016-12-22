@@ -17,4 +17,10 @@ class Login
         }
     }
     
+    public function logout()
+    {
+         session('user',null);
+         return success('');
+    }
+    
 }
