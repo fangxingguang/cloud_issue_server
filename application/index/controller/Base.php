@@ -8,7 +8,7 @@ class Base extends controller
     {
         $user = session('user');
         if(!$user){
-           error('请登录！');
+           json(-1);
         }
         $this->user = session('user');
         $this->user_id = session('user.user_id');
