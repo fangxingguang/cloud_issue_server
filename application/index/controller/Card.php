@@ -18,8 +18,9 @@ class Card extends Base
     {
         $param = Request::instance()->param();
         $where['group_id'] = $param['group_id'];
-        $card_list = Db::table('card')->field('card_id,card_name')->where($where)->order('card_order')->select();
+        $card_list = Db::table('card')->where($where)->order('card_order')->select();
         foreach($card_list as &$val){
+            $val['card_owner'] = json_decode($val['card_owner']);
             $val['tasks'] =  Db::table('task')->where('card_id',$val['card_id'])->select();
         }
         return $card_list;
@@ -28,7 +29,9 @@ class Card extends Base
     public function update()
     {
         $param = Request::instance()->param();
-        $param['card_owner'] = json_encode($param['card_owner']);
+        if(isset($param['card_owner'])){
+            $param['card_owner'] = json_encode($param['card_owner']);
+        }
         $result = Db::table('card')->where('card_id',$param['card_id'])->update($param);
         return $result;
     }
