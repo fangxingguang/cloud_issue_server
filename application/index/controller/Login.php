@@ -11,6 +11,7 @@ class Login
         $user = Db::table('user')->field('user_id,user_name')->where($where)->find();
         if($user){
             session('user',$user);
+            push_msg('all',1,'用户'.$where['user_name'].'上线啦！');
             return success($user);
         }else{
             return error('用户不存在！');

@@ -38,6 +38,12 @@ class Task extends Base
      public function move()
     {
         $param = Request::instance()->param();
+        $to_card = Db::table('card')->where('card_id',$param['to_card_id'])->find();
+        if($to_card['card_owner']){
+            $card_owner_arr = json_decode($to_card['card_owner']);
+            push_msg('all',1,'任务流程变更！');
+            push_msg($card_owner_arr,2,'小伙，到你啦！');
+        }
         $result = Db::table('task')->where('task_id',$param['task_id'])->update(['card_id'=>$param['to_card_id']]);
         return $result;
     }

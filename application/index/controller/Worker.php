@@ -5,7 +5,28 @@ use think\worker\Server;
 class Worker extends Server
 {
     protected $socket = 'websocket://0.0.0.0:2346';
+    protected $processes = 1;
     public $uidConnections = array();
+
+    public function onWorkerStart($worker)
+    {
+        echo 'work start!';
+        //开启一个内部端口，方便内部系统推送数据，Text协议格式 文本+换行符
+        $inner_text_worker = new Worker('text://0.0.0.0:5678');
+        $inner_text_worker->onMessage = function($connection, $buffer)
+        {
+            global $worker;
+            // $data数组格式，里面有uid，表示向那个uid的页面推送数据
+            $data = json_decode($buffer, true);
+            $uid = $data['uid'];
+            // 通过workerman，向uid的页面推送数据
+            $ret = $this->sendMessageByUid($uid, $buffer);
+            // 返回推送结果
+            $connection->send($ret ? 'ok' : 'fail');
+        };
+        // ## 执行监听 ##
+        $inner_text_worker->listen();
+    } 
 
     public function onMessage($connection,$data)
     {
