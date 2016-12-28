@@ -1,5 +1,7 @@
 <?php
 use Workerman\Worker;
+use \Workerman\Lib\Timer;
+
 require_once './Workerman/Autoloader.php';
 // 初始化一个worker容器，监听1234端口
 $worker = new Worker('websocket://0.0.0.0:2346');
@@ -15,16 +17,36 @@ $worker->onWorkerStart = function($worker)
         global $worker;
         // $data数组格式，里面有uid，表示向那个uid的页面推送数据
         $data = json_decode($buffer, true);
+        //print_r($data);
         $uid = $data['uid'];
+        $time = $data['time'];
         $message = json_encode($data['data']);
         // uid 为 all 时是全局广播
         // 全局广播
         if($uid == 'all'){
-            $ret = broadcast($message);
+            if($time > 0){
+                // n秒后执行，最后一个参数传递false，表示只运行一次
+                Timer::add($time, 'broadcast', array($message), false);
+                $ret = true;
+            }else{
+                $ret = broadcast($message);
+            }
         }elseif(is_array($uid)){// 给多个uid发送
-            $ret = sendMessageByUidArr($uid,$message);
+            if($time > 0){
+                // n秒后执行，最后一个参数传递false，表示只运行一次
+                Timer::add($time, 'sendMessageByUidArr', array($uid,$message), false);
+                $ret = true;
+            }else{
+                 $ret = sendMessageByUidArr($uid,$message);
+            }
         }else{// 给特定uid发送
-            $ret = sendMessageByUid($uid, $message);
+            if($time > 0){
+                // n秒后执行，最后一个参数传递false，表示只运行一次
+                Timer::add($time, 'sendMessageByUid', array($uid,$message), false);
+                $ret = true;
+            }else{
+                $ret = sendMessageByUid($uid, $message);
+            }
         }
         // 返回推送结果
         $connection->send($ret ? 'ok' : 'fail');
@@ -36,6 +58,7 @@ $worker->uidConnections = array();
 // 当有客户端发来消息时执行的回调函数
 $worker->onMessage = function($connection, $data)use($worker)
 {
+    global $worker;
     // 判断当前客户端是否已经验证,既是否设置了uid
     if(!isset($connection->uid))
     {

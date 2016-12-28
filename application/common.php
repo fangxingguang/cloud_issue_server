@@ -29,9 +29,10 @@ function dateline(){
     return date('Y-m-d H:i:s');
 }
 
-function push_msg($uid,$type,$msg)
+function push_msg($uid,$type,$msg,$time=0)
 {
     $data['uid'] = $uid;
+    $data['time'] = $time;
     $data['data'] = array(
         'type'=>$type,
         'msg'=>$msg,
