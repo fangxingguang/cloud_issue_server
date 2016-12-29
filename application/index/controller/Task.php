@@ -43,6 +43,7 @@ class Task extends Base
             $card_owner_arr = json_decode($to_card['card_owner']);
             push_msg('all',1,'任务流程变更！');
             push_msg($card_owner_arr,2,'小伙，到你啦！');
+            push_msg('all',3,['group_id'=>$to_card['group_id']]);
         }
         $result = Db::table('task')->where('task_id',$param['task_id'])->update(['card_id'=>$param['to_card_id']]);
         return $result;
