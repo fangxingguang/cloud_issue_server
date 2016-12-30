@@ -1,109 +1,87 @@
--- phpMyAdmin SQL Dump
--- version 4.4.15
--- http://www.phpmyadmin.net
---
--- Host: 127.0.0.1
--- Generation Time: 2016-12-14 01:12:12
--- 服务器版本： 10.1.8-MariaDB
--- PHP Version: 5.6.15
+/*
+SQLyog Community v12.2.1 (32 bit)
+MySQL - 5.1.73 : Database - cloud_issue
+*********************************************************************
+*/
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+/*!40101 SET NAMES utf8 */;
 
+/*!40101 SET SQL_MODE=''*/;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`cloud_issue` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
---
--- Database: `cloud_issue`
---
-CREATE DATABASE IF NOT EXISTS `cloud_issue` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `cloud_issue`;
 
--- --------------------------------------------------------
+/*Table structure for table `card` */
 
---
--- 表的结构 `card`
---
+DROP TABLE IF EXISTS `card`;
 
-CREATE TABLE IF NOT EXISTS `card` (
-  `card_id` int(11) NOT NULL,
+CREATE TABLE `card` (
+  `card_id` int(11) NOT NULL AUTO_INCREMENT,
   `card_name` varchar(20) NOT NULL,
   `card_order` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) DEFAULT NULL,
+  `card_owner` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
---
--- 表的结构 `task`
---
+/*Table structure for table `group` */
 
-CREATE TABLE IF NOT EXISTS `task` (
-  `task_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `group`;
+
+CREATE TABLE `group` (
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(20) DEFAULT NULL,
+  `group_des` varchar(256) DEFAULT NULL,
+  `group_create_time` datetime DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `group_parter` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+/*Table structure for table `task` */
+
+DROP TABLE IF EXISTS `task`;
+
+CREATE TABLE `task` (
+  `task_id` int(11) NOT NULL AUTO_INCREMENT,
   `card_id` int(11) NOT NULL,
   `task_name` varchar(20) NOT NULL,
   `task_des` varchar(1024) NOT NULL,
   `task_level` int(11) NOT NULL,
   `task_create_time` datetime NOT NULL,
-  `task_status` int(11) NOT NULL
+  `task_status` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
+/*Table structure for table `user` */
 
---
--- 表的结构 `user`
---
+DROP TABLE IF EXISTS `user`;
 
-CREATE TABLE IF NOT EXISTS `user` (
-  `user_id` int(11) NOT NULL,
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(64) NOT NULL,
-  `user_create_time` datetime NOT NULL
+  `user_email` varchar(64) DEFAULT NULL,
+  `user_create_time` datetime NOT NULL,
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Indexes for dumped tables
---
+/*Data for the table `user` */
 
---
--- Indexes for table `card`
---
-ALTER TABLE `card`
-  ADD PRIMARY KEY (`card_id`);
+insert  into `user`(`user_id`,`user_name`,`user_email`,`user_create_time`) values 
+(6,'admin','admin@163.com','2016-12-25 00:30:44'),
+(8,'admin2','','2016-12-25 12:18:14'),
+(9,'admin3','','2016-12-25 12:18:20');
 
---
--- Indexes for table `task`
---
-ALTER TABLE `task`
-  ADD PRIMARY KEY (`task_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `card`
---
-ALTER TABLE `card`
-  MODIFY `card_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `task`
---
-ALTER TABLE `task`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
