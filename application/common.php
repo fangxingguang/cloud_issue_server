@@ -37,17 +37,21 @@ function push_msg($uid,$type,$msg,$time=0)
         'type'=>$type,
         'msg'=>$msg,
     );
-
-    // 建立socket连接到内部推送端口
-    $client = stream_socket_client('tcp://127.0.0.1:5678', $errno, $errmsg, 1);
-    // 推送的数据，包含uid字段，表示是给这个uid推送
-    // 发送数据，注意5678端口是Text协议的端口，Text协议需要在数据末尾加上换行符
-    fwrite($client, json_encode($data)."\n");
-    // 读取推送结果
-    $re = fread($client, 8192);
-    if($re == 'ok'){
-        return false;
-    }else{
-        return true;
+    try{
+        // 建立socket连接到内部推送端口
+        $client = stream_socket_client('tcp://127.0.0.1:5678', $errno, $errmsg, 1);
+        // 推送的数据，包含uid字段，表示是给这个uid推送
+        // 发送数据，注意5678端口是Text协议的端口，Text协议需要在数据末尾加上换行符
+        fwrite($client, json_encode($data)."\n");
+        // 读取推送结果
+        $re = fread($client, 8192);
+        if($re == 'ok'){
+            return false;
+        }else{
+            return true;
+        }
+    }catch(\Exception $e){
+        
     }
+
 }
