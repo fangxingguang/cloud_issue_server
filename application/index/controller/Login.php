@@ -12,6 +12,7 @@ class Login
         if($user){
             session('user',$user);
             push_msg('all',1,'用户'.$where['user_name'].'上线啦！',3);
+            add_log('登录系统');
             return success($user);
         }else{
             return error('用户不存在！');

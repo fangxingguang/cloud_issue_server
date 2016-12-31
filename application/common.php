@@ -53,5 +53,8 @@ function push_msg($uid,$type,$msg,$time=0)
     }catch(\Exception $e){
         
     }
+}
 
+function add_log($info){
+    model('index/Log')->add($info);
 }

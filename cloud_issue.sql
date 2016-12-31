@@ -2,7 +2,8 @@
 SQLyog Community v12.2.1 (32 bit)
 MySQL - 5.1.73 : Database - cloud_issue
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -76,12 +77,23 @@ CREATE TABLE `user` (
 
 /*Data for the table `user` */
 
-insert  into `user`(`user_id`,`user_name`,`user_email`,`user_create_time`) values 
-(6,'admin','admin@163.com','2016-12-25 00:30:44'),
-(8,'admin2','','2016-12-25 12:18:14'),
+insert  into `user`(`user_id`,`user_name`,`user_email`,`user_create_time`) values 
+
+(6,'admin','admin@163.com','2016-12-25 00:30:44'),
+
+(8,'admin2','','2016-12-25 12:18:14'),
+
 (9,'admin3','','2016-12-25 12:18:20');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+CREATE TABLE `log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_info` varchar(100) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `log_create_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
