@@ -1,6 +1,6 @@
 <?php
 namespace app\index\model;
-
+use \think\Db;
 use think\Model;
 
 class Log extends Model
@@ -10,6 +10,7 @@ class Log extends Model
         $data['user_id'] = session('user.user_id');
         $data['log_info'] = $info;
         $data['log_create_time'] = dateline();
+        $data['log_sql'] = Db::getLastSql();
         db('log')->insert($data);
     }
 

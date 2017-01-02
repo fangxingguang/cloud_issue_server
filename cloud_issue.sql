@@ -95,5 +95,6 @@ CREATE TABLE `log` (
   `log_info` varchar(100) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `log_create_time` datetime DEFAULT NULL,
+  `log_sql` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8

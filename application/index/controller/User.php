@@ -8,9 +8,9 @@ class User extends Base
     {
         $param = Request::instance()->param();
         $param['user_create_time'] = dateline();
-        Db::table('user')->insert($param);
-        $user_id = Db::name('user')->getLastInsID();
+        $user_id = Db::table('user')->insertGetId($param);
         $result = Db::table('user')->where('user_id',$user_id)->find();
+        add_log('新建用户：'.$param['user_name']);
         return $result;
     }
 
@@ -24,11 +24,15 @@ class User extends Base
     {
         $param = Request::instance()->param();
         $result = Db::table('user')->update($param);
+        add_log('更新用户：'.$param['user_name']);
         return $result;
     }
 
     public function delete($user_id='')
     {
+        $where['user_id'] = $user_id;
+        $user= Db::table('user')->where($where)->find();
+        add_log('删除用户：'.$user['user_name']);
         return Db::table('user')->delete($user_id);
     }
     

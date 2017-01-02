@@ -8,8 +8,8 @@ class Card extends Base
     {
         $param = Request::instance()->param();
         $param['user_id'] = $this->user_id;
-        Db::table('card')->insert($param);
-        $card_id = Db::name('card')->getLastInsID();
+        $card_id = Db::table('card')->insertGetId($param);
+        add_log('新建流程：'.$param['card_name']);
         $result = Db::table('card')->where('card_id',$card_id)->find();
         return $result;
     }
@@ -33,12 +33,20 @@ class Card extends Base
             $param['card_owner'] = json_encode($param['card_owner']);
         }
         $result = Db::table('card')->where('card_id',$param['card_id'])->update($param);
+        add_log('更新流程：'.$param['card_name']);
         return $result;
     }
 
     public function delete($card_id='')
     {
-        return Db::table('card')->delete($card_id);
+        $where['card_id'] = $card_id;
+        $card= Db::table('card')->where($where)->find();
+        $result = Db::table('card')->delete($card_id);
+        add_log('删除流程：'.$card['card_name']);
+
+        Db::table('task')->where('card_id',$card_id)->delete();
+
+        return $result;
     }
 
     public function order()
