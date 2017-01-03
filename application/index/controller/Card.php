@@ -29,11 +29,14 @@ class Card extends Base
     public function update()
     {
         $param = Request::instance()->param();
+        $where['card_id'] = $param['card_id'];
+        $card = Db::table('card')->where($where)->find();
+
         if(isset($param['card_owner'])){
             $param['card_owner'] = json_encode($param['card_owner']);
         }
         $result = Db::table('card')->where('card_id',$param['card_id'])->update($param);
-        add_log('更新流程：'.$param['card_name']);
+        add_log('更新流程：'.$card['card_name']);
         return $result;
     }
 
