@@ -11,6 +11,8 @@ class Task extends Base
         $task_id = Db::table('task')->insertGetId($param);
         add_log('新建任务：'.$param['task_name']);
         $result = Db::table('task')->where('task_id',$task_id)->find();
+        $card = Db::table('card')->where('card_id',$result['card_id'])->find();
+        push_msg('all',3,['group_id'=>$card['group_id']]);
         return $result;
     }
 
@@ -28,6 +30,9 @@ class Task extends Base
         $param = Request::instance()->param();
         $result = Db::table('task')->where('task_id',$param['task_id'])->update($param);
         add_log('更新任务：'.$param['task_name']);
+
+        $card = Db::table('task')->join('card','task.card_id = card.card_id')->where('task_id',$param['task_id'])->find();
+        push_msg('all',3,['group_id'=>$card['group_id']]);
         return $result;
     }
 
@@ -37,6 +42,8 @@ class Task extends Base
         $task= Db::table('task')->where($where)->find();
         $result = Db::table('task')->delete($task_id);
         add_log('删除任务：'.$task['task_name']);
+        $card = Db::table('card')->where('card_id',$task['card_id'])->find();
+        push_msg('all',3,['group_id'=>$card['group_id']]);
         return $result;
     }
 
@@ -49,8 +56,8 @@ class Task extends Base
         $to_card = Db::table('card')->where('card_id',$param['to_card_id'])->find();
         if($to_card['card_owner']){
             $card_owner_arr = json_decode($to_card['card_owner']);
-            push_msg('all',1,'任务流程变更！');
-            push_msg($card_owner_arr,2,'小伙，到你啦！');
+            push_msg($card_owner_arr,1,'你有新的任务啦！');
+            push_msg($card_owner_arr,2,'你有新的任务啦！');
             push_msg('all',3,['group_id'=>$to_card['group_id']]);
         }
         $result = Db::table('task')->where('task_id',$param['task_id'])->update(['card_id'=>$param['to_card_id']]);
