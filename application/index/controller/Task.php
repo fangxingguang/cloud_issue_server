@@ -40,29 +40,38 @@ class Task extends Base
     {
         $where['task_id'] = $task_id;
         $task= Db::table('task')->where($where)->find();
+        $card = Db::table('card')->where('card_id',$task['card_id'])->find();
+
+        $card_owner_arr = json_decode($card['card_owner'],true);
+        $this->user_limit($card_owner_arr);
+
         $result = Db::table('task')->delete($task_id);
         add_log('删除任务：'.$task['task_name']);
-        $card = Db::table('card')->where('card_id',$task['card_id'])->find();
+      
         push_msg('all',3,['group_id'=>$card['group_id']]);
-        return $result;
+        return success($result);
     }
 
-     public function move()
+    public function move()
     {
         $param = Request::instance()->param();
         $where['task_id'] = $param['task_id'];
         $task= Db::table('task')->where($where)->find();
 
+        $card = Db::table('card')->where('card_id',$task['card_id'])->find();
+        $card_owner_arr = json_decode($card['card_owner'],true);
+        $this->user_limit($card_owner_arr);
+
         $to_card = Db::table('card')->where('card_id',$param['to_card_id'])->find();
         if($to_card['card_owner']){
-            $card_owner_arr = json_decode($to_card['card_owner']);
+            $card_owner_arr = json_decode($to_card['card_owner'],true);
             push_msg($card_owner_arr,1,'你有新的任务啦！');
             push_msg($card_owner_arr,2,'你有新的任务啦！');
             push_msg('all',3,['group_id'=>$to_card['group_id']]);
         }
         $result = Db::table('task')->where('task_id',$param['task_id'])->update(['card_id'=>$param['to_card_id']]);
         add_log('移动任务：'.$task['task_name']);
-        return $result;
+        return success($result);
     }
     
 }
