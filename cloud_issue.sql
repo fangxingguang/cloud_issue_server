@@ -1,9 +1,8 @@
 /*
 SQLyog Community v12.2.1 (32 bit)
-MySQL - 5.1.73 : Database - cloud_issue
+MySQL - 5.6.25-log : Database - cloud_issue
 *********************************************************************
-*/
-
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -31,7 +30,6 @@ CREATE TABLE `card` (
   PRIMARY KEY (`card_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 /*Table structure for table `group` */
 
 DROP TABLE IF EXISTS `group`;
@@ -46,6 +44,18 @@ CREATE TABLE `group` (
   PRIMARY KEY (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `log` */
+
+DROP TABLE IF EXISTS `log`;
+
+CREATE TABLE `log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_info` varchar(100) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `log_create_time` datetime DEFAULT NULL,
+  `log_sql` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `task` */
 
@@ -54,8 +64,8 @@ DROP TABLE IF EXISTS `task`;
 CREATE TABLE `task` (
   `task_id` int(11) NOT NULL AUTO_INCREMENT,
   `card_id` int(11) NOT NULL,
-  `task_name` varchar(20) NOT NULL,
-  `task_des` varchar(1024) NOT NULL,
+  `task_name` varchar(32) NOT NULL,
+  `task_des` text NOT NULL,
   `task_level` int(11) NOT NULL,
   `task_create_time` datetime NOT NULL,
   `task_status` int(11) NOT NULL,
@@ -75,26 +85,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `user` */
-
-insert  into `user`(`user_id`,`user_name`,`user_email`,`user_create_time`) values 
-
-(6,'admin','admin@163.com','2016-12-25 00:30:44'),
-
-(8,'admin2','','2016-12-25 12:18:14'),
-
-(9,'admin3','','2016-12-25 12:18:20');
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
-CREATE TABLE `log` (
-  `log_id` int(11) NOT NULL AUTO_INCREMENT,
-  `log_info` varchar(100) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `log_create_time` datetime DEFAULT NULL,
-  `log_sql` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
