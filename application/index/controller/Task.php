@@ -62,6 +62,7 @@ class Task extends Base
         $card_owner_arr = json_decode($card['card_owner'],true);
         $this->user_limit((array)$card_owner_arr);
 
+        $result = Db::table('task')->where('task_id',$param['task_id'])->update(['card_id'=>$param['to_card_id']]);
         $to_card = Db::table('card')->where('card_id',$param['to_card_id'])->find();
         if($to_card['card_owner']){
             $card_owner_arr = json_decode($to_card['card_owner'],true);
@@ -69,7 +70,6 @@ class Task extends Base
             push_msg($card_owner_arr,2,'你有新的任务啦！（'.$task['task_name'].'）');
             push_msg('all',3,['group_id'=>$to_card['group_id'],'task_id'=>$task['task_id']]);
         }
-        $result = Db::table('task')->where('task_id',$param['task_id'])->update(['card_id'=>$param['to_card_id']]);
         add_log('移动任务：'.$task['task_name']);
         return success($result);
     }

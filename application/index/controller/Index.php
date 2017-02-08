@@ -8,9 +8,9 @@ class Index
         return 'webcome';
     }
 
-    public function test()
+    public function update()
     {
-        $re =  push_msg('all',2,'测试');
+        $re =  push_msg('all',4,'程序更新');
         var_dump($re);exit;
     }
 
