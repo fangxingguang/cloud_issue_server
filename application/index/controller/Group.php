@@ -40,16 +40,23 @@ class Group extends Base
     public function update()
     {
         $param = Request::instance()->param();
+
+        $where['group_id'] = $param['group_id'];
+        $group= Db::table('group')->where($where)->find();
+        $this->user_limit([$group['user_id']]);
+
         $param['group_parter'] = json_encode($param['group_parter']);
         $result = Db::table('group')->where('group_id',$param['group_id'])->update($param);
         add_log('更新项目：'.$param['group_name']);
-        return $result;
+        return success($result);
     }
 
     public function delete($group_id='')
     {
         $where['group_id'] = $group_id;
         $group= Db::table('group')->where($where)->find();
+        $this->user_limit([$group['user_id']]);
+
         $result = Db::table('group')->delete($group_id);
         add_log('删除项目：'.$group['group_name']);
 
@@ -57,7 +64,7 @@ class Group extends Base
         Db::table('task')->where('card_id','in',array_column($card_list,'card_id'))->delete();
         Db::table('card')->where('group_id',$group_id)->delete();
         
-        return $result;
+        return success($result);
     }
     
 }

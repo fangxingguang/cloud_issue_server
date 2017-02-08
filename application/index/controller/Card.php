@@ -7,6 +7,11 @@ class Card extends Base
     public function add()
     {
         $param = Request::instance()->param();
+
+        $where['group_id'] = $param['group_id'];
+        $group= Db::table('group')->where($where)->find();
+        $this->user_limit([$group['user_id']]);
+
         $param['user_id'] = $this->user_id;
         $card_id = Db::table('card')->insertGetId($param);
         add_log('新建流程：'.$param['card_name']);
@@ -32,24 +37,29 @@ class Card extends Base
         $where['card_id'] = $param['card_id'];
         $card = Db::table('card')->where($where)->find();
 
+        $this->user_limit([$card['user_id']]);
+
         if(isset($param['card_owner'])){
             $param['card_owner'] = json_encode($param['card_owner']);
         }
         $result = Db::table('card')->where('card_id',$param['card_id'])->update($param);
         add_log('更新流程：'.$card['card_name']);
-        return $result;
+        return success($result);
     }
 
     public function delete($card_id='')
     {
         $where['card_id'] = $card_id;
         $card= Db::table('card')->where($where)->find();
+
+        $this->user_limit([$card['user_id']]);
+
         $result = Db::table('card')->delete($card_id);
         add_log('删除流程：'.$card['card_name']);
 
         Db::table('task')->where('card_id',$card_id)->delete();
 
-        return $result;
+        return success($result);
     }
 
     public function order()
