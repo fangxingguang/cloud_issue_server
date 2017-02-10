@@ -26,7 +26,7 @@ class Card extends Base
         $card_list = Db::table('card')->where($where)->order('card_order')->select();
         foreach($card_list as &$val){
             $val['card_owner'] = json_decode($val['card_owner']);
-            $val['tasks'] =  Db::table('task')->where('card_id',$val['card_id'])->select();
+            $val['tasks'] =  Db::table('task')->join('user','task.user_id = user.user_id')->where('card_id',$val['card_id'])->select();
         }
         return $card_list;
     }
@@ -65,6 +65,12 @@ class Card extends Base
     public function order()
     {
         $param = Request::instance()->param();
+
+        $where['card_id'] = $param['order'][0]['card_id'];
+        $card= Db::table('card')->where($where)->find();
+
+        $this->user_limit([$card['user_id']]);
+
         foreach($param['order'] as $val){
             Db::table('card')->where('card_id',$val['card_id'])->update(['card_order'=>$val['card_order']]);
         }

@@ -8,6 +8,7 @@ class Task extends Base
     {
         $param = Request::instance()->param();
         $param['task_create_time'] = date('Y-m-d H:i:s');
+        $param['user_id'] = $this->user_id;
         $task_id = Db::table('task')->insertGetId($param);
         add_log('新建任务：'.$param['task_name']);
         $result = Db::table('task')->where('task_id',$task_id)->find();
