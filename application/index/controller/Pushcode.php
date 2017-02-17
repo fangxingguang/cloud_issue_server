@@ -10,7 +10,7 @@ class Pushcode extends Base
         $where['card_id'] = $param['card_id'];
         $card= Db::table('card')->where($where)->find();
         $card_owner_arr = json_decode($card['card_owner'],true);
-        //$this->user_limit($card_owner_arr);
+        $this->user_limit($card_owner_arr);
 
         switch($param['push_address']){
             case 'test1' : $cmd = '/opt/deploy/git/git_branch_test'.' '.$param['branch_name'];break;
