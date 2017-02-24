@@ -29,6 +29,7 @@ class Task extends Base
     public function update()
     {
         $param = Request::instance()->param();
+        $param['task_file'] = json_encode($param['task_file']);
         $result = Db::table('task')->where('task_id',$param['task_id'])->update($param);
         add_log('更新任务：'.$param['task_name']);
 
