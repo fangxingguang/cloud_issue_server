@@ -11,7 +11,7 @@ class Task extends Base
         $param['user_id'] = $this->user_id;
         $task_id = Db::table('task')->insertGetId($param);
         add_log('新建任务：'.$param['task_name']);
-        $result = Db::table('task')->where('task_id',$task_id)->find();
+        $result = Db::table('task')->join('user','task.user_id = user.user_id')->where('task_id',$task_id)->find();
         $card = Db::table('card')->where('card_id',$result['card_id'])->find();
         push_msg('all',3,['group_id'=>$card['group_id']]);
         return $result;
