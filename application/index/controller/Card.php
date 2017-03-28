@@ -26,7 +26,7 @@ class Card extends Base
         $card_list = Db::table('card')->where($where)->order('card_order')->select();
         foreach($card_list as &$val){
             $val['card_owner'] = json_decode($val['card_owner']);
-            $val['tasks'] =  Db::table('task')->join('user','task.user_id = user.user_id')->where('card_id',$val['card_id'])->order('task_create_time desc')->limit(10)->select();
+            $val['tasks'] =  Db::table('task')->join('user','task.user_id = user.user_id')->where('card_id',$val['card_id'])->order('task_create_time desc')->limit(15)->select();
         }
         return $card_list;
     }
