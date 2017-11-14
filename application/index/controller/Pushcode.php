@@ -16,6 +16,7 @@ class Pushcode extends Base
             case 'test1' : $cmd = '/opt/deploy/git/git_branch_test'.' '.$param['branch_name'];break;
             case 'test2' : $cmd = '/opt/deploy/git/git_branch_test2'.' '.$param['branch_name'];break;
             case 'pre' : $cmd = '/opt/deploy/git/rsync_www_pre.sh';break;
+            case 'pro' : $cmd = '/opt/deploy/git/rsync_www_pro.sh';break;
         }
 
         exec($cmd,$array);
