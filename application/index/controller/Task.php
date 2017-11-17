@@ -7,9 +7,6 @@ class Task extends Base
     public function add()
     {
         $param = Request::instance()->param();
-        if(isset($param['task_file'])){
-            $param['task_file'] = json_encode($param['task_file']);
-        }
         $param['task_create_time'] = date('Y-m-d H:i:s');
         $param['user_id'] = $this->user_id;
         $task_id = Db::table('task')->insertGetId($param);
@@ -32,9 +29,6 @@ class Task extends Base
     public function update()
     {
         $param = Request::instance()->param();
-        if(isset($param['task_file'])){
-            $param['task_file'] = json_encode($param['task_file']);
-        }
         $result = Db::table('task')->where('task_id',$param['task_id'])->update($param);
         add_log('更新任务：'.$param['task_name']);
 
