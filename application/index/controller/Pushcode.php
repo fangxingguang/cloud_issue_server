@@ -17,6 +17,12 @@ class Pushcode extends Base
             case 'test2' : $cmd = '/opt/deploy/git/git_branch_test2'.' '.$param['branch_name'];break;
             case 'pre' : $cmd = '/opt/deploy/git/rsync_www_pre.sh';break;
             case 'pro' : $cmd = '/opt/deploy/git/rsync_www_pro.sh';break;
+            case 'pre-backend' : $cmd = '/opt/deploy/git/rsync_backend_pre.sh';break;
+            case 'pro-backend' : $cmd = '/opt/deploy/git/rsync_backend_pro.sh';break;
+        }
+
+        if (!file_exists($cmd)) {
+            return success('未找到发布脚本！');
         }
 
         exec($cmd,$array);
