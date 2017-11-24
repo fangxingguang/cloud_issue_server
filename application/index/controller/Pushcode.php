@@ -1,5 +1,6 @@
 <?php
 namespace app\index\controller;
+use app\index\model\PushLog;
 use \think\Request;
 use \think\Db;
 class Pushcode extends Base
@@ -27,7 +28,18 @@ class Pushcode extends Base
 //        }
 
         exec($cmd,$array);
-        return success(implode("<br/>",$array));
+        $res = implode("<br/>",$array);
+
+        PushLog::create([
+            'card_id'=>$param['card_id'],
+            'push_address'=>$param['push_address'],
+            'branch_name'=>$param['branch_name'],
+            'result'=>$res,
+            'create_time'=>dateline(),
+            'create_user'=>$this->user['user_name'],
+        ]);
+
+        return success($res);
     }
 
    
