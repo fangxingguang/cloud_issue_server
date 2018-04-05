@@ -29,16 +29,14 @@ class Job extends Base
         $list2 = [];
         $groupList = Db::table('job_group')->select();
         foreach ($groupList as $group) {
-            $arr = [];
-            $taskList = Db::table('job')->where(['group_id' => $group['id']])->select();
-            foreach ($taskList as $task) {
-                $arr[$task['status']][] = $task;
-            }
+            $taskList[0] = Db::table('job')->where(['group_id' => $group['id'],'status'=>0])->limit(10)->select();
+            $taskList[1] = Db::table('job')->where(['group_id' => $group['id'],'status'=>1])->limit(10)->select();
+            $taskList[2] = Db::table('job')->where(['group_id' => $group['id'],'status'=>2])->limit(10)->select();
             $list2[] = [
                 'id' => $group['id'],
                 'name' => $group['name'],
                 'uid' => $group['uid'],
-                'taskList' => $arr
+                'taskList' => $taskList
             ];
         }
         $result = [
